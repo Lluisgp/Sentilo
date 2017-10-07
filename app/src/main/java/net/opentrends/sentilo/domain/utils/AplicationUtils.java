@@ -17,7 +17,7 @@ public class AplicationUtils {
      *
      * @return date/time in timestamp string
      */
-    public String GetFormatedTimeStamp() {
+    public String getFormatedTimeStamp() {
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy'T'HH:mm:ss'CET'");
         return df.format(new Date());
     }
@@ -29,7 +29,7 @@ public class AplicationUtils {
      * @param userLocation
      * @return
      */
-    public String GetLocationString(UserLocation userLocation) {
+    public String getLocationString(UserLocation userLocation) {
         String strLocation = String.valueOf(userLocation.getLatitude());
         strLocation += " ";
         strLocation += String.valueOf(userLocation.getLongitude());
