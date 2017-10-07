@@ -7,12 +7,12 @@ import net.opentrends.sentilo.data.sentilo.api.SentiloApi;
 import net.opentrends.sentilo.data.sentilo.api.SentiloApiRequestDto;
 import net.opentrends.sentilo.domain.models.ApplicationConfig;
 import net.opentrends.sentilo.domain.models.UserLocation;
+import net.opentrends.sentilo.domain.utils.AplicationUtils;
+import net.opentrends.sentilo.domain.models.MessageEvent;
 
-import java.text.FieldPosition;
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import okhttp3.OkHttpClient;
@@ -22,7 +22,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import java.text.DateFormat;
 
 /**
  * Created by lgonzalez on 06/10/2017.
@@ -44,28 +43,27 @@ public class SentiloCloudDataStore {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 Log.d(TAG, response.toString());
+                EventBus.getDefault().post(new MessageEvent(response.toString()));
+
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Log.d(TAG, "error " + t.getMessage());
+                Log.d(TAG, "Error " + t.getMessage());
+                EventBus.getDefault().post(new MessageEvent(TAG + " Error " + t.getMessage()));
             }
         });
     }
 
     private SentiloApiRequestDto buildSentiloRequestDto(UserLocation userLocation, ApplicationConfig applicationConfig) {
+
         SentiloApiRequestDto sentiloApiRequestDto = new SentiloApiRequestDto();
+        AplicationUtils aplicationUtil = new AplicationUtils();
 
         ObservationDto observationDto = new ObservationDto();
         observationDto.setValue(applicationConfig.getNick().toString());
-        DateFormat df = new SimpleDateFormat("MM/dd/yyyy'T'HH:mm:ss'CET'");
-        String ftdTime = df.format(new Date());
-        observationDto.setTimestamp(ftdTime);
-        //observationDto.setTimestamp("17/02/2016T11:43:45CET");
-        String strLocation = String.valueOf(userLocation.getLatitude());
-        strLocation +=" ";
-        strLocation += String.valueOf(userLocation.getLongitude());
-        observationDto.setLocation(strLocation);
+        observationDto.setTimestamp(aplicationUtil.GetFormatedTimeStamp());
+        observationDto.setLocation(aplicationUtil.GetLocationString(userLocation));
 
         List<ObservationDto> observationDtoList = new ArrayList<>();
         observationDtoList.add(observationDto);

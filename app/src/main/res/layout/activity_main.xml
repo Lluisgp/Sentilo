@@ -7,7 +7,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="net.opentrends.sentilo.presentation.MainActivity">
+    tools:context="net.opentrends.sentilo.presentation.MainActivity"
+    android:weightSum="1">
 
     <LinearLayout
         android:id="@+id/sentilo_form"
@@ -89,7 +90,6 @@
 
         <Button
             android:id="@+id/buttonSave"
-            style="?android:textAppearanceSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -97,4 +97,12 @@
             android:textStyle="bold" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:layout_weight="0.43" />
+
 </LinearLayout>

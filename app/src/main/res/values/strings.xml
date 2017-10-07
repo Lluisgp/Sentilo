@@ -8,6 +8,6 @@
     <string name="url">Url</string>
     <string name="nick">Nick</string>
     <string name="enable_location">Enable location</string>
-    <string name="save">Save</string>
-    <string name="secondsBetweenLocationUpdates">Seconds beetwen location updates</string>
+    <string name="save">Save / Start</string>
+    <string name="secondsBetweenLocationUpdates">Seconds between location updates</string>
 </resources>
