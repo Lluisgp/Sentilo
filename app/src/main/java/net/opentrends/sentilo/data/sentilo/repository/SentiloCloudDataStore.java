@@ -32,27 +32,31 @@ public class SentiloCloudDataStore {
     private static final String TAG = SentiloCloudDataStore.class.getName();
 
     public void sendLocation(ApplicationConfig applicationConfig, UserLocation userLocation) {
-        Retrofit retrofit = buildRetrofit(applicationConfig);
-        SentiloApi sentiloApi = retrofit.create(SentiloApi.class);
+        try {
+            Retrofit retrofit = buildRetrofit(applicationConfig);
+            SentiloApi sentiloApi = retrofit.create(SentiloApi.class);
 
-        SentiloApiRequestDto sentiloRequestDto = buildSentiloRequestDto(userLocation, applicationConfig);
+            SentiloApiRequestDto sentiloRequestDto = buildSentiloRequestDto(userLocation, applicationConfig);
 
-        Call<Void> call = sentiloApi.sendLocation(applicationConfig.getToken(), sentiloRequestDto);
-        call.enqueue(new Callback<Void>() {
+            Call<Void> call = sentiloApi.sendLocation(applicationConfig.getToken(), sentiloRequestDto);
+            call.enqueue(new Callback<Void>() {
 
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                Log.d(TAG, response.toString());
-                EventBus.getDefault().post(new MessageEvent(response.toString()));
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    Log.d(TAG, response.toString());
+                    EventBus.getDefault().post(new MessageEvent(response.toString()));
 
-            }
+                }
 
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Log.d(TAG, "Error " + t.getMessage());
-                EventBus.getDefault().post(new MessageEvent(TAG + " Error " + t.getMessage()));
-            }
-        });
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Log.d(TAG, "Error " + t.getMessage());
+                    EventBus.getDefault().post(new MessageEvent(TAG + " Error " + t.getMessage()));
+                }
+            });
+        } catch (Exception e) {
+            EventBus.getDefault().post(new MessageEvent(TAG + " Error Catch " + e.getMessage()));
+        }
     }
 
     private SentiloApiRequestDto buildSentiloRequestDto(UserLocation userLocation, ApplicationConfig applicationConfig) {
@@ -62,8 +66,8 @@ public class SentiloCloudDataStore {
 
         ObservationDto observationDto = new ObservationDto();
         observationDto.setValue(applicationConfig.getNick().toString());
-        observationDto.setTimestamp(aplicationUtil.GetFormatedTimeStamp());
-        observationDto.setLocation(aplicationUtil.GetLocationString(userLocation));
+        observationDto.setTimestamp(aplicationUtil.getFormatedTimeStamp());
+        observationDto.setLocation(aplicationUtil.getLocationString(userLocation));
 
         List<ObservationDto> observationDtoList = new ArrayList<>();
         observationDtoList.add(observationDto);
