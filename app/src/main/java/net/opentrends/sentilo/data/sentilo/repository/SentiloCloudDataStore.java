@@ -1,12 +1,12 @@
-package net.opentrends.sentilo.data.sentilo;
+package net.opentrends.sentilo.data.sentilo.repository;
 
 import android.util.Log;
 
-import net.opentrends.sentilo.data.api.ObservationDto;
-import net.opentrends.sentilo.data.api.SentiloApi;
-import net.opentrends.sentilo.data.api.SentiloApiRequestDto;
-import net.opentrends.sentilo.data.models.SentiloConfig;
-import net.opentrends.sentilo.data.models.UserLocation;
+import net.opentrends.sentilo.data.sentilo.api.ObservationDto;
+import net.opentrends.sentilo.data.sentilo.api.SentiloApi;
+import net.opentrends.sentilo.data.sentilo.api.SentiloApiRequestDto;
+import net.opentrends.sentilo.domain.models.ApplicationConfig;
+import net.opentrends.sentilo.domain.models.UserLocation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,13 +27,13 @@ public class SentiloCloudDataStore {
 
     private static final String TAG = SentiloCloudDataStore.class.getName();
 
-    public void sendLocation(SentiloConfig sentiloConfig, UserLocation userLocation) {
-        Retrofit retrofit = buildRetrofit(sentiloConfig);
+    public void sendLocation(ApplicationConfig applicationConfig, UserLocation userLocation) {
+        Retrofit retrofit = buildRetrofit(applicationConfig);
         SentiloApi sentiloApi = retrofit.create(SentiloApi.class);
 
         SentiloApiRequestDto sentiloRequestDto = buildSentiloRequestDto(userLocation);
 
-        Call<Void> call = sentiloApi.sendLocation(sentiloConfig.getToken(), sentiloRequestDto);
+        Call<Void> call = sentiloApi.sendLocation(applicationConfig.getToken(), sentiloRequestDto);
         call.enqueue(new Callback<Void>() {
 
             @Override
@@ -64,7 +64,7 @@ public class SentiloCloudDataStore {
         return sentiloApiRequestDto;
     }
 
-    private Retrofit buildRetrofit(SentiloConfig sentiloConfig) {
+    private Retrofit buildRetrofit(ApplicationConfig applicationConfig) {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
@@ -73,7 +73,7 @@ public class SentiloCloudDataStore {
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(sentiloConfig.getUrl())
+                .baseUrl(applicationConfig.getUrl())
                 .client(httpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();

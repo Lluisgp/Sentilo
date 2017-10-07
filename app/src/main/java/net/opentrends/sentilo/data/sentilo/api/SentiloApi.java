@@ -1,4 +1,4 @@
-package net.opentrends.sentilo.data.api;
+package net.opentrends.sentilo.data.sentilo.api;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

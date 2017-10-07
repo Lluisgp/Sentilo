@@ -6,9 +6,9 @@ import android.widget.EditText;
 import android.widget.Switch;
 
 import net.opentrends.sentilo.R;
-import net.opentrends.sentilo.data.models.SentiloConfig;
-import net.opentrends.sentilo.data.sentilo.SentiloDataRepository;
-import net.opentrends.sentilo.data.sentilo.SentiloRepository;
+import net.opentrends.sentilo.domain.models.ApplicationConfig;
+import net.opentrends.sentilo.data.sentilo.repository.SentiloDataRepository;
+import net.opentrends.sentilo.domain.LocationRepository;
 
 import br.com.safety.locationlistenerhelper.core.LocationTracker;
 import butterknife.BindView;
@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.switchLocationTracker)
     Switch switchLocationTracker;
 
-    SentiloRepository sentiloRepository;
+    LocationRepository locationRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,35 +45,35 @@ public class MainActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        sentiloRepository = SentiloDataRepository.getInstance(this);
+        locationRepository = SentiloDataRepository.getInstance(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        SentiloConfig sentiloConfig = sentiloRepository.getSentiloData();
-        token.setText(sentiloConfig.getToken());
-        url.setText(sentiloConfig.getUrl());
-        nick.setText(sentiloConfig.getNick());
-        secondsBetweenLocationUpdates.setText(String.valueOf(sentiloConfig.getSecondsBetweenLocationUpdates()));
-        switchLocationTracker.setChecked(sentiloConfig.isEnableLocation());
+        ApplicationConfig applicationConfig = locationRepository.getApplicationConfig();
+        token.setText(applicationConfig.getToken());
+        url.setText(applicationConfig.getUrl());
+        nick.setText(applicationConfig.getNick());
+        secondsBetweenLocationUpdates.setText(String.valueOf(applicationConfig.getSecondsBetweenLocationUpdates()));
+        switchLocationTracker.setChecked(applicationConfig.isEnableLocation());
     }
 
     @OnClick(R.id.buttonSave)
     public void onClickSaveButton() {
-        updateSentiloData();
+        updateApplicationConfig();
         startLocationTracker();
     }
 
-    private void updateSentiloData() {
-        SentiloConfig sentiloConfig = new SentiloConfig();
-        sentiloConfig.setToken(token.getText().toString());
-        sentiloConfig.setUrl(url.getText().toString());
-        sentiloConfig.setNick(nick.getText().toString());
-        sentiloConfig.setSecondsBetweenLocationUpdates(Integer.parseInt(secondsBetweenLocationUpdates.getText().toString()) * 1000);
-        sentiloConfig.setEnableLocation(switchLocationTracker.isChecked());
+    private void updateApplicationConfig() {
+        ApplicationConfig applicationConfig = new ApplicationConfig();
+        applicationConfig.setToken(token.getText().toString());
+        applicationConfig.setUrl(url.getText().toString());
+        applicationConfig.setNick(nick.getText().toString());
+        applicationConfig.setSecondsBetweenLocationUpdates(Integer.parseInt(secondsBetweenLocationUpdates.getText().toString()) * 1000);
+        applicationConfig.setEnableLocation(switchLocationTracker.isChecked());
 
-        sentiloRepository.updateSentiloData(sentiloConfig);
+        locationRepository.updateApplicationConfig(applicationConfig);
     }
 
     private void startLocationTracker() {
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (switchLocationTracker.isChecked()) {
             locationTracker = new LocationTracker("sentilo.location")
-                    .setInterval(sentiloRepository.getSentiloData().getSecondsBetweenLocationUpdates())
+                    .setInterval(locationRepository.getApplicationConfig().getSecondsBetweenLocationUpdates())
                     .setGps(true)
                     .setNetWork(false)
                     .start(getBaseContext(), MainActivity.this);

@@ -1,10 +1,10 @@
-package net.opentrends.sentilo.data.models;
+package net.opentrends.sentilo.domain.models;
 
 /**
  * Created by lgonzalez on 06/10/2017.
  */
 
-public class SentiloConfig {
+public class ApplicationConfig {
 
     private String token;
 

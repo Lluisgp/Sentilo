@@ -1,11 +1,12 @@
-package net.opentrends.sentilo.data.sentilo;
+package net.opentrends.sentilo.data.sentilo.repository;
 
 import android.content.Context;
 
-import net.opentrends.sentilo.data.models.SentiloConfig;
-import net.opentrends.sentilo.data.models.UserLocation;
+import net.opentrends.sentilo.domain.models.ApplicationConfig;
+import net.opentrends.sentilo.domain.models.UserLocation;
+import net.opentrends.sentilo.domain.LocationRepository;
 
-public class SentiloDataRepository implements SentiloRepository {
+public class SentiloDataRepository implements LocationRepository {
 
     private static SentiloDataRepository INSTANCE;
 
@@ -28,17 +29,17 @@ public class SentiloDataRepository implements SentiloRepository {
 
     @Override
     public void sendLocation(UserLocation userLocation) {
-        SentiloConfig sentiloConfig = sentiloPrefsDataStore.getSentiloData();
-        sentiloCloudDataStore.sendLocation(sentiloConfig, userLocation);
+        ApplicationConfig applicationConfig = sentiloPrefsDataStore.getSentiloData();
+        sentiloCloudDataStore.sendLocation(applicationConfig, userLocation);
     }
 
     @Override
-    public void updateSentiloData(SentiloConfig sentiloConfig) {
-        sentiloPrefsDataStore.saveSentiloData(sentiloConfig);
+    public void updateApplicationConfig(ApplicationConfig applicationConfig) {
+        sentiloPrefsDataStore.saveSentiloData(applicationConfig);
     }
 
     @Override
-    public SentiloConfig getSentiloData() {
+    public ApplicationConfig getApplicationConfig() {
         return sentiloPrefsDataStore.getSentiloData();
     }
 }

@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".data.location.LocationReceiver">
+        <receiver android:name=".location.LocationReceiver">
             <intent-filter>
                 <action android:name="sentilo.location"/>
             </intent-filter>

@@ -1,11 +1,11 @@
-package net.opentrends.sentilo.data.sentilo;
+package net.opentrends.sentilo.data.sentilo.repository;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 
-import net.opentrends.sentilo.data.models.SentiloConfig;
+import net.opentrends.sentilo.domain.models.ApplicationConfig;
 
 public class SentiloPrefsDataStore {
 
@@ -20,15 +20,15 @@ public class SentiloPrefsDataStore {
         this.preferences = context.getSharedPreferences(SENTILO, Context.MODE_PRIVATE);
     }
 
-    public SentiloConfig getSentiloData() {
-        String jsonSentilo = preferences.getString(SENTILO_DATA, gson.toJson(new SentiloConfig()));
-        SentiloConfig sentiloConfig = gson.fromJson(jsonSentilo, SentiloConfig.class);
-        return sentiloConfig;
+    public ApplicationConfig getSentiloData() {
+        String jsonSentilo = preferences.getString(SENTILO_DATA, gson.toJson(new ApplicationConfig()));
+        ApplicationConfig applicationConfig = gson.fromJson(jsonSentilo, ApplicationConfig.class);
+        return applicationConfig;
     }
 
-    public void saveSentiloData(SentiloConfig sentiloConfig) {
+    public void saveSentiloData(ApplicationConfig applicationConfig) {
         preferences.edit()
-                .putString(SENTILO_DATA, gson.toJson(sentiloConfig))
+                .putString(SENTILO_DATA, gson.toJson(applicationConfig))
                 .apply();
     }
 }

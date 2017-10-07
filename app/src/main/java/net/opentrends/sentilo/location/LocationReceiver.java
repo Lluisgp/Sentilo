@@ -1,4 +1,4 @@
-package net.opentrends.sentilo.data.location;
+package net.opentrends.sentilo.location;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -6,9 +6,9 @@ import android.content.Intent;
 import android.location.Location;
 import android.util.Log;
 
-import net.opentrends.sentilo.data.sentilo.SentiloDataRepository;
-import net.opentrends.sentilo.data.models.UserLocation;
-import net.opentrends.sentilo.data.sentilo.SentiloRepository;
+import net.opentrends.sentilo.data.sentilo.repository.SentiloDataRepository;
+import net.opentrends.sentilo.domain.models.UserLocation;
+import net.opentrends.sentilo.domain.LocationRepository;
 
 import br.com.safety.locationlistenerhelper.core.SettingsLocationTracker;
 
@@ -31,8 +31,8 @@ public class LocationReceiver extends BroadcastReceiver {
             userLocation.setLatitude(locationData.getLatitude());
             userLocation.setLongitude(locationData.getLongitude());
 
-            SentiloRepository sentiloRepository = SentiloDataRepository.getInstance(context);
-            sentiloRepository.sendLocation(userLocation);
+            LocationRepository locationRepository = SentiloDataRepository.getInstance(context);
+            locationRepository.sendLocation(userLocation);
         }
     }
 }

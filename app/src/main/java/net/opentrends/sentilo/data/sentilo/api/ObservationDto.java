@@ -1,4 +1,4 @@
-package net.opentrends.sentilo.data.api;
+package net.opentrends.sentilo.data.sentilo.api;
 
 import com.google.gson.annotations.SerializedName;
 
