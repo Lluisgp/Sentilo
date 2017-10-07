@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         applicationConfig.setToken(token.getText().toString());
         applicationConfig.setUrl(url.getText().toString());
         applicationConfig.setNick(nick.getText().toString());
-        applicationConfig.setSecondsBetweenLocationUpdates(Integer.parseInt(secondsBetweenLocationUpdates.getText().toString()) * 1000);
+        applicationConfig.setSecondsBetweenLocationUpdates(Integer.parseInt(secondsBetweenLocationUpdates.getText().toString()));
         applicationConfig.setEnableLocation(switchLocationTracker.isChecked());
 
         locationRepository.updateApplicationConfig(applicationConfig);
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (switchLocationTracker.isChecked()) {
             locationTracker = new LocationTracker("sentilo.location")
-                    .setInterval(locationRepository.getApplicationConfig().getSecondsBetweenLocationUpdates())
+                    .setInterval(locationRepository.getApplicationConfig().getSecondsBetweenLocationUpdates()*1000)
                     .setGps(true)
                     .setNetWork(false)
                     .start(getBaseContext(), MainActivity.this);
